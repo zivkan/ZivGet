@@ -1,0 +1,3 @@
+<Project>
+  <!-- prevent higher level Directory.Build.props from being imported -->
+</Project>
