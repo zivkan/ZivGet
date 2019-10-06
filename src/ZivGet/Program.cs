@@ -2,13 +2,39 @@
 
 namespace ZivGet
 {
-    using System;
+    using System.CommandLine;
+    using System.CommandLine.Builder;
+    using System.CommandLine.Hosting;
+    using System.CommandLine.Invocation;
+    using System.Threading.Tasks;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
+    using ZivGet.Commands;
 
     internal class Program
     {
-        static void Main(string[] args)
+        internal static async Task<int> Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Parser parser = new CommandLineBuilder(
+                new RootCommand()
+                {
+                    new Command("restore")
+                    {
+                        Handler = CommandHandler.Create<IHost>(RestoreCommand.Invoke)
+                    }
+                })
+                .UseDefaults()
+                .UseHost(host =>
+                {
+                    host.ConfigureServices(ConfigureServices);
+                })
+                .Build();
+
+            return await parser.InvokeAsync(args);
+        }
+
+        private static void ConfigureServices(HostBuilderContext context, IServiceCollection services)
+        {
         }
     }
 }
