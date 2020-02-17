@@ -3,6 +3,7 @@
 namespace ZivGet.UnitTests.Commands
 {
     using System.CommandLine;
+    using System.CommandLine.Parsing;
     using System.Linq;
     using Xunit;
 
