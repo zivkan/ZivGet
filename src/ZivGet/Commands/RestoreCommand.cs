@@ -2,7 +2,6 @@
 
 namespace ZivGet.Commands
 {
-    using System;
     using System.CommandLine;
     using System.CommandLine.Invocation;
     using System.Threading.Tasks;
@@ -10,23 +9,6 @@ namespace ZivGet.Commands
 
     internal class RestoreCommand
     {
-        internal static Task<int> Invoke(IHost host, RestoreArgs restoreArgs)
-        {
-            if (restoreArgs?.Targets == null)
-            {
-                Console.WriteLine("targets is null");
-            }
-            else
-            {
-                Console.WriteLine("targets = " + restoreArgs.Targets.Length);
-                foreach (var file in restoreArgs.Targets)
-                {
-                    Console.WriteLine(file);
-                }
-            }
-            return Task.FromResult(0);
-        }
-
         internal static Command GetCommand()
         {
             var command = new Command("restore")
@@ -41,6 +23,20 @@ namespace ZivGet.Commands
                 });
 
             return command;
+        }
+
+        internal static Task<int> Invoke(IHost host, RestoreArgs restoreArgs)
+        {
+            // Grand idea for simple restore entry point:
+
+            // RestoreContext context = new RestoreContext(); // has singletons like logger, download manager, extraction manager, etc
+            // ValidateArguments(restoreArgs) // check input projects exist, etc.
+            // IReadOnlyList<Project> projects = GetProjectsToRestore(restoreArgs, context); // expand sln file. Find project references not included on command line or sln
+            // IReadOnlyList<IDictionary<Project, RestoreGraph>> restoreGraphs = CalculateRestoreGraphs(projects);
+            // DownloadAndExtractNupkgs(restoreGraphs);
+            // WriteAssetsFiles(restoreGraphs);
+
+            return Task.FromResult(0);
         }
     }
 }
