@@ -15,14 +15,7 @@ namespace ZivGet
     {
         internal static async Task<int> Main(string[] args)
         {
-            Parser parser = new CommandLineBuilder(
-                new RootCommand()
-                {
-                    new Command("restore")
-                    {
-                        Handler = CommandHandler.Create<IHost>(RestoreCommand.Invoke)
-                    }
-                })
+            Parser parser = new CommandLineBuilder(GetRootCommand())
                 .UseDefaults()
                 .UseHost(host =>
                 {
@@ -31,6 +24,14 @@ namespace ZivGet
                 .Build();
 
             return await parser.InvokeAsync(args);
+        }
+
+        internal static RootCommand GetRootCommand()
+        {
+            return new RootCommand()
+            {
+                RestoreCommand.GetCommand()
+            };
         }
 
         private static void ConfigureServices(HostBuilderContext context, IServiceCollection services)

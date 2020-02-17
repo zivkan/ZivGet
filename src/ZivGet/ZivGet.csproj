@@ -11,4 +11,10 @@
     <PackageReference Include="System.CommandLine.Hosting" Version="0.3.0-alpha.19405.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>ZivGet.UnitTests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
 </Project>
