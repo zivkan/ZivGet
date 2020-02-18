@@ -1,3 +1,6 @@
 <Project>
   <!-- prevent higher level Directory.Build.props from being imported -->
+  <PropertyGroup>
+    <nullable>enable</nullable>
+  </PropertyGroup>
 </Project>
