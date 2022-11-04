@@ -2,30 +2,36 @@
 
 namespace ZivGet.Commands
 {
+    using System;
     using System.CommandLine;
-    using System.CommandLine.Invocation;
+    using System.CommandLine.Binding;
     using System.Threading.Tasks;
-    using Microsoft.Extensions.Hosting;
 
     internal class RestoreCommand
     {
         internal static Command GetCommand()
         {
-            var command = new Command("restore")
-            {
-                Handler = CommandHandler.Create<IHost, RestoreArgs>(Invoke)
-            };
+            return GetCommand(Invoke);
+        }
 
-            command.Add(
-                new Argument<string>("targets")
-                {
-                    Arity = ArgumentArity.ZeroOrMore
-                });
+        internal static Command GetCommand(Func<RestoreArgs, Task<int>> handler)
+        {
+            var command = new Command("restore");
+
+            var targets = new Argument<string[]>("targets")
+            {
+                Arity = ArgumentArity.ZeroOrMore
+            };
+            command.Add(targets);
+
+            var restoreArgsBinder = new RestoreArgsBinder(targets);
+
+            command.SetHandler(handler, restoreArgsBinder);
 
             return command;
         }
 
-        internal static Task<int> Invoke(IHost host, RestoreArgs restoreArgs)
+        internal static Task<int> Invoke(RestoreArgs restoreArgs)
         {
             // Grand idea for simple restore entry point:
 
@@ -37,6 +43,25 @@ namespace ZivGet.Commands
             // WriteAssetsFiles(restoreGraphs);
 
             return Task.FromResult(0);
+        }
+
+        private class RestoreArgsBinder : BinderBase<RestoreArgs>
+        {
+            private Argument<string[]> _targets;
+
+            public RestoreArgsBinder(Argument<string[]> targets)
+            {
+                _targets = targets;
+            }
+
+            protected override RestoreArgs GetBoundValue(BindingContext bindingContext)
+            {
+                string[] targets = bindingContext.ParseResult.GetValueForArgument(_targets);
+
+                var restoreArgs = new RestoreArgs(targets);
+
+                return restoreArgs;
+            }
         }
     }
 }

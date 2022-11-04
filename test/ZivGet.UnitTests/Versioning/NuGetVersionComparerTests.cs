@@ -9,7 +9,7 @@ namespace ZivGet.UnitTests.Versioning
 
     public class NuGetVersionComparerTests
     {
-        internal static IEnumerable<object[]> Compare_VariousVersions_ReturnsCorrectValue_Data()
+        public static IEnumerable<object[]> Compare_VariousVersions_ReturnsCorrectValue_Data()
         {
             var v1_0_0 = new NuGetVersion(1, 0, 0, 0, null, null);
             var v2_0_0 = new NuGetVersion(2, 0, 0, 0, null, null);
